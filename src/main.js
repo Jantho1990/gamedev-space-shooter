@@ -7,7 +7,6 @@ while (guess !== myGuess) {
     guesses++
     if (guess < myGuess) {
         alert('Higher')
-        console.log('burp')
     } else if (guess > myGuess) {
         alert('Lower')
         console.log('lower')
