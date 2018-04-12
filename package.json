@@ -5,7 +5,7 @@
   "main": "game.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "budo src/main.js:build.js --live"
+    "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [env] ]"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/Jantho1990/gamedev-1#readme",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
     "budo": "^11.2.0"
   }
 }
