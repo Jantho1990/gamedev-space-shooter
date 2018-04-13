@@ -137,6 +137,7 @@ for (let ring = 1; ring < 28; ring++) {
         ctx.fill()
     }
 }
+ctx.restore()
 
 // GlobalAlpha
 function drawCircles() {
@@ -149,7 +150,7 @@ function drawCircles() {
     }
 }
 
-ctx.restore()
+ctx.save()
 ctx.fillStyle = "skyblue"
 ctx.fillRect(0, 0, w, h)
 ctx.save()
@@ -164,3 +165,38 @@ ctx.restore()
 console.log('restored')
 ctx.fillStyle = "lemonchiffon"
 drawCircles()
+
+ctx.restore()
+
+// globalCompositeOperation
+// ...there's lots of these, see the book
+
+// Draw a company logo
+ctx.clearRect(0, 0, w, h)
+// ctx.setTransform(1, 0, 0, 1, 0, 0)
+// ctx.translate(0 - (w / 2), 0 - (h / 2))
+// starfield()
+// ctx.translate(w / 2, h / 4)
+ctx.textAlign = "left"
+ctx.font = "bold 50pt monospace"
+ctx.fillStyle = "black"
+ctx.fillText("MOM", 10, 60)
+ctx.fillText("POP", 10, 118)
+
+ctx.globalCompositeOperation = "source-atop"
+
+for (let i = 0; i < 6; i++) {
+    ctx.fillStyle = `hsl(${i * (250 / 6)}, 90%, 55%)`
+    ctx.fillRect(0, i * 20, 200, 20)
+}
+
+ctx.fillStyle = "#999"
+ctx.globalCompositeOperation = "destination-over"
+ctx.fillText("MOM", 13, 62)
+ctx.fillText("POP", 13, 120)
+ctx.font = "30pt monospace"
+
+ctx.globalCompositeOperation = "source-over"
+"games".split("").forEach((ch, i) => {
+    ctx.fillText(ch, i * 37 + 12, 145)
+})
