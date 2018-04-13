@@ -66,9 +66,10 @@ ctx.strokeText("strokes the word", center, h - 30)
 // Image
 let img = new Image()
 img.src = "res/img/kerrigan.png"
-img.addEventListener('load', draw, false)
+// img.addEventListener('load', draw, false)
 
 function draw() {
+    console.log('drew some stuff')
     for (let i = 0; i < 10; i += 52) {
         const x = Math.random() * w - 50
         const y = Math.random() * h - 100
@@ -124,6 +125,7 @@ ctx.restore()
 drawTransformations()
 
 // Ring
+ctx.save()
 ctx.fillRect(0, 0, w, h)
 ctx.translate(w / 2, h / 2) // move the context to the center of the canvas
 for (let ring = 1; ring < 28; ring++) {
@@ -135,3 +137,30 @@ for (let ring = 1; ring < 28; ring++) {
         ctx.fill()
     }
 }
+
+// GlobalAlpha
+function drawCircles() {
+    for (let i = 0; i < 100; i++) {
+        const x = Math.random() * w
+        const y = Math.random() * h
+        ctx.beginPath()
+        ctx.arc(x, y, 30, 0, Math.PI * 2, false)
+        ctx.fill()
+    }
+}
+
+ctx.restore()
+ctx.fillStyle = "skyblue"
+ctx.fillRect(0, 0, w, h)
+ctx.save()
+ctx.globalAlpha = 0.3
+ctx.fillStyle = "blue"
+drawCircles()
+ctx.fillStyle = "orange"
+drawCircles()
+ctx.fillStyle = "green"
+drawCircles()
+ctx.restore()
+console.log('restored')
+ctx.fillStyle = "lemonchiffon"
+drawCircles()
