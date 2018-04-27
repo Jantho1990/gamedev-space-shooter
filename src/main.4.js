@@ -2,15 +2,15 @@ const canvas = document.querySelector('#board canvas')
 const ctx = canvas.getContext("2d")
 console.log(ctx.canvas)
 
-ctx.strokeStyle = "#000"
+ctx.strokeStyle = "black"
+ctx.fillStyle = "red"
+
+ctx.font = "48px serif"
 
 const {
     width: w,
     height: h
 } = canvas
-
-ctx.globalAlpha = 0.02
-
 
 const start = Date.now()
 /* const timer = setInterval(() => {
@@ -25,20 +25,15 @@ const start = Date.now()
 }, 1000 / 60) */
 
 function loop () {
-    requestAnimationFrame(loop)    
-    ctx.save()
     ctx.fillRect(0, 0, w, h)
-    ctx.fillStyle = "#FFF"
-    ctx.globalAlpha = 1
 
-    const x = Math.random() * w
-    const y = Math.random() * h
-    const radius = Math.random() * 20
+    ctx.strokeText(Date.now() - start, 20, 80)
 
-    ctx.beginPath()
-    ctx.arc(x, y, radius, 0, Math.PI * 2)
-    ctx.fill()
-
-    ctx.restore()
+    if (Math.random() < 0.01) {
+        ctx.strokeText("Game Over!", 160, 180)
+        clearInterval(timer)
+    } else {
+        requestAnimationFrame(loop)
+    }
 }
 requestAnimationFrame(loop)
