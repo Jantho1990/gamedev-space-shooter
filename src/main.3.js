@@ -33,7 +33,7 @@ function loop () {
         ctx.strokeText("Game Over!", 160, 180)
         clearInterval(timer)
     } else {
-        requestAnimationFrame(loop)
+        setTimeout(loop, 1000 / 60)
     }
 }
-requestAnimationFrame(loop)
+loop()
