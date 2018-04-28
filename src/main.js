@@ -1,4 +1,5 @@
 import KeyControls from "../lib/KeyControls"
+import MouseControls from "../lib/MouseControls"
 
 const canvas = document.querySelector('#board canvas')
 const ctx = canvas.getContext("2d")
@@ -18,7 +19,12 @@ let last = 0
 let x = w / 2
 let y = h / 2
 let color = 0
+
+let bw = 50
+let bh = 50
+
 const controls = new KeyControls()
+const mouse = new MouseControls(canvas)
 
 function loop (ms) {
     requestAnimationFrame(loop)
@@ -34,17 +40,23 @@ function loop (ms) {
     ctx.strokeText(`Frame length: ${(dt * 1000).toFixed(2)} ms`, 70, 50)
     ctx.strokeText(`Total time: ${t.toFixed(2)}`, 70, 90) */
 
-    x += controls.x
-    y += controls.y
-    if (!controls.action) {
+    x = mouse.pos.x
+    y = mouse.pos.y
+    if (controls.action) {
         color += 10
         if (color > 360) {
             color -= 360
         }
     }
 
+    bw >= 1 ? bw += controls.x : bw = 1
+    bh >= 1 ? bh += -(controls.y) : bh = 1
+
     // draw the rectangle
-    ctx.fillStyle = `hsl(${color}, 50%, 50%)`
-    ctx.fillRect(x, y, 50, 50)
+    if (mouse.isDown) {
+        ctx.fillStyle = `hsl(${color}, 50%, 50%)`
+        ctx.fillRect(x, y, bw, bh)
+    }
+    mouse.update()
 }
 requestAnimationFrame(loop)
