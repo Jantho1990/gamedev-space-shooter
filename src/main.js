@@ -12,9 +12,24 @@ const scene = new Container()
 const texture = new Texture('res/img/spaceship.png')
 
 for (let i = 0; i < 50; i++) {
+    const speed = {
+        x: Math.random() * 150 + 50,
+        y: Math.random() * 150 + 50,
+    }
     const ship = new Sprite(texture)
     ship.pos.x = Math.random() * w
     ship.pos.y = Math.random() * h
+    ship.update = function (dt) {
+        this.pos.x += speed.x * dt
+        this.pos.y += speed.y * dt
+        if (this.pos.x > w) {
+            // console.log('ping!', this.pos, w, h, this.pos.x > w)
+            this.pos.x = -(this.texture.img.width)
+        }
+        if (this.pos.y > h) {
+            this.pos.y = -(this.texture.img.height)
+        }
+    }
     scene.add(ship)
 }
 
