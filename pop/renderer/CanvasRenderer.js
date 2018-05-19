@@ -5,7 +5,7 @@ class CanvasRenderer {
     this.h = canvas.height = h
     this.view = canvas
     this.ctx = canvas.getContext("2d")
-    this.ctx.textBaselin = "top" // Render from top-left
+    this.ctx.textBaseline = "top" // Render from top-left
   }
 
   render(container, clear = true) {
@@ -31,7 +31,7 @@ class CanvasRenderer {
           ctx.fillText(child.text, 0, 0)
         } else if (child.texture) {
           let { texture, pos } = child
-          ctx.drawImage(texture.img, pos.x, pos.y)
+          ctx.drawImage(texture.img, 0, 0)
         }
 
         // Handle the child types
