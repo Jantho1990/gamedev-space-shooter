@@ -75,6 +75,20 @@ score.pos.y = h - 30
 let scoreAmount = 0
 let gameOver = false
 
+// Game Over
+function doGameOver() {
+  const gameOverMessage = new Text("Game Over", {
+    font: "30pt sans-serif",
+    fill: "#8B8994",
+    align: "center"
+  })
+  gameOverMessage.pos.x = w / 2
+  gameOverMessage.pos.y = 120
+  scene.add(gameOverMessage)
+  scene.remove(ship)
+  gameOver = true
+}
+
 // Add everything to the scene container
 scene.add(new Sprite(textures.background))
 scene.add(ship)
@@ -96,18 +110,11 @@ function loop (ms) {
     // Game logic code
 
     // Fire bullets
-    if (controls.action && t - lastShot > 0.15) {
+    if (!gameOver && controls.action && t - lastShot > 0.15) {
       lastShot = t
       let offset = {x: 46, y: 39 } // half ship height - half bullet height
       fireBullet(ship.pos.x + offset.x, ship.pos.y + offset.y)
     }
-
-    // Kill offscreen bullets
-    bullets.children.forEach(bullet => {
-      if (bullet.pos.x >= w + 20) {
-        bullet.dead = true
-      }
-    })
 
     // Spawn bad guys
     if (t - lastSpawn > spawnSpeed) {
@@ -120,13 +127,6 @@ function loop (ms) {
       spawnSpeed = spawnSpeed < 0.05 ? 0.6 : spawnSpeed * 0.97 + 0.001
     }
 
-    // Kill offscreen baddies
-    baddies.children.forEach(baddie => {
-      if (baddie.pos.x <= 0 - 25) {
-        baddie.dead = true
-      }
-    })
-
     // Check for collisions and/or offscreen
     baddies.children.forEach(baddie => {
       bullets.children.forEach(bullet => {
@@ -138,7 +138,16 @@ function loop (ms) {
           baddie.dead = bullet.dead = true
           scoreAmount += Math.floor(t)
         }
+        if (bullet.pos.x >= w + 20) {
+          bullet.dead = true
+        }
       })
+      if (baddie.pos.x <  - 50) {
+        if (!gameOver) {
+          doGameOver()
+        }
+        baddie.dead = true
+      }
     })
 
     scene.update(dt, t)
