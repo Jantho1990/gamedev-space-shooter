@@ -150,6 +150,8 @@ function loop (ms) {
       }
     })
 
+    score.text = `score: ${scoreAmount}`
+
     scene.update(dt, t)
     renderer.render(scene)
 }
