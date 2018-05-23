@@ -1,5 +1,5 @@
 import pop from "../pop/index"
-const { CanvasRenderer, Container, KeyControls, Sprite, Texture } = pop
+const { CanvasRenderer, Container, KeyControls, Sprite, Text, Texture } = pop
 
 // Game setup
 const w = 640
@@ -63,11 +63,24 @@ function spawnBaddie(x, y, speed) {
 let lastSpawn = 0
 let spawnSpeed = 1.0
 
+// Add the score game object
+const score = new Text("score:", {
+  font: "20px sans-serif",
+  fill: "#8b8994",
+  align: "center"
+})
+score.pos.x = w / 2
+score.pos.y = h - 30
+// Game state variables
+let scoreAmount = 0
+let gameOver = false
+
 // Add everything to the scene container
 scene.add(new Sprite(textures.background))
 scene.add(ship)
 scene.add(bullets)
 scene.add(baddies)
+scene.add(score)
 
 // Time variables
 let dt = 0
@@ -100,7 +113,7 @@ function loop (ms) {
     if (t - lastSpawn > spawnSpeed) {
       lastSpawn = t
       const speed = -50 - (Math.random() * Math.random() * 100)
-      const position = Math.random() * (h -24)
+      const position = Math.random() * (h - 50)
       spawnBaddie(w, position, speed)
 
       // Accelerating for the next spawn
@@ -112,6 +125,20 @@ function loop (ms) {
       if (baddie.pos.x <= 0 - 25) {
         baddie.dead = true
       }
+    })
+
+    // Check for collisions and/or offscreen
+    baddies.children.forEach(baddie => {
+      bullets.children.forEach(bullet => {
+        // Check distance between baddie and bullet
+        const dx = baddie.pos.x + 25 - (bullet.pos.x + 10)
+        const dy = baddie.pos.y + 25 - (bullet.pos.y + 4)
+        if (Math.sqrt(dx * dx + dy * dy) < 35) {
+          // A hit!
+          baddie.dead = bullet.dead = true
+          scoreAmount += Math.floor(t)
+        }
+      })
     })
 
     scene.update(dt, t)
