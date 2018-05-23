@@ -1,16 +1,6 @@
 import pop from "../pop/index"
 const { CanvasRenderer, Container, KeyControls, Sprite, Texture } = pop
 
-function fireBullet(x, y) {
-  const bullet = new Sprite(textures.bullet)
-  bullet.pos.x = x
-  bullet.pos.y = y
-  bullet.update = function(dt) {
-    this.pos.x += 400 * dt
-  }
-  bullets.add(bullet)
-}
-
 // Game setup
 const w = 640
 const h = 300
@@ -21,9 +11,10 @@ const scene = new Container()
 const controls = new KeyControls()
 
 const textures = {
-    background: new Texture("res/img/bkgd1.png"),
-    spaceship: new Texture("res/img/spaceship.png"),
-    bullet: new Texture("res/img/laser-bullet.png")
+  background: new Texture("res/img/bkgd1.png"),
+  spaceship: new Texture("res/img/spaceship.png"),
+  bullet: new Texture("res/img/laser-bullet.png"),
+  baddie: new Texture("res/img/ufo.png")
 }
 
 // Make a spaceship.
@@ -36,7 +27,7 @@ ship.update = function (dt, t) {
     const { pos } = this
     pos.x += controls.x * dt * 200
     pos.y += controls.y * dt * 200
-
+    
     if (pos.x < 0) pos.x = 0
     if (pos.x > w - 73) pos.x = w - 73
     if (pos.y < 0) pos.y = 0
@@ -45,14 +36,38 @@ ship.update = function (dt, t) {
 
 // Bullets
 const bullets = new Container()
+function fireBullet(x, y) {
+  const bullet = new Sprite(textures.bullet)
+  bullet.pos.x = x
+  bullet.pos.y = y
+  bullet.update = function(dt) {
+    this.pos.x += 400 * dt
+  }
+  bullets.add(bullet)
+}
+// Game state variables
+let lastShot = 0
+
+// Bad guys
+const baddies = new Container()
+function spawnBaddie(x, y, speed) {
+  const baddie = new Sprite(textures.baddie)
+  baddie.pos.x = x
+  baddie.pos.y = y
+  baddie.update = function(dt) {
+    this.pos.x += speed * dt
+  }
+  baddies.add(baddie)
+}
+// Game state variables
+let lastSpawn = 0
+let spawnSpeed = 1.0
 
 // Add everything to the scene container
 scene.add(new Sprite(textures.background))
 scene.add(ship)
 scene.add(bullets)
-
-// Game state variables
-let lastShot = 0
+scene.add(baddies)
 
 // Time variables
 let dt = 0
@@ -66,14 +81,36 @@ function loop (ms) {
     last = t
 
     // Game logic code
+
+    // Fire bullets
     if (controls.action && t - lastShot > 0.15) {
       lastShot = t
       let offset = {x: 46, y: 39 } // half ship height - half bullet height
       fireBullet(ship.pos.x + offset.x, ship.pos.y + offset.y)
     }
+
+    // Kill offscreen bullets
     bullets.children.forEach(bullet => {
       if (bullet.pos.x >= w + 20) {
         bullet.dead = true
+      }
+    })
+
+    // Spawn bad guys
+    if (t - lastSpawn > spawnSpeed) {
+      lastSpawn = t
+      const speed = -50 - (Math.random() * Math.random() * 100)
+      const position = Math.random() * (h -24)
+      spawnBaddie(w, position, speed)
+
+      // Accelerating for the next spawn
+      spawnSpeed = spawnSpeed < 0.05 ? 0.6 : spawnSpeed * 0.97 + 0.001
+    }
+
+    // Kill offscreen baddies
+    baddies.children.forEach(baddie => {
+      if (baddie.pos.x <= 0 - 25) {
+        baddie.dead = true
       }
     })
 
