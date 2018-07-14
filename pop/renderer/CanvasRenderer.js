@@ -23,6 +23,10 @@ class CanvasRenderer {
           ctx.translate(Math.round(child.pos.x), Math.round(child.pos.y))
         }
 
+        if (child.anchor) {
+          ctx.translate(child.anchor.x, child.anchor.y)
+        }
+
         if (child.scale) {
           ctx.scale(child.scale.x, child.scale.y)
         }

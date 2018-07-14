@@ -23,7 +23,8 @@ const textures = {
   spaceship: new Texture("res/img/spaceship2.png"),
   bullet: new Texture("res/img/laser-bullet.png"),
   baddie: new Texture("res/img/ufo.png"),
-  building: new Texture("res/img/building.png")
+  building: new Texture("res/img/building.png"),
+  crosshair: new Texture("res/img/crosshair.png")
 }
 
 // Make the background
@@ -64,6 +65,37 @@ for (let x = 0; x < 10; x++) {
   const b = buildings.add(new Sprite(textures.building))
   makeRandom(b, math.rand(w))
 }
+
+const flipped = Math.random() < 0.5
+ship.scale.x = flipped ? -1 : 1
+ship.anchor.x = flipped ? 32 : 0
+console.log(flipped)
+
+function makeCrosshair(pos) {
+  const c = scene.add(new Sprite(textures.crosshair));
+  c.pos = pos;
+  c.anchor = { x: -16, y: -16 }; // Center the crosshair
+}
+
+// Default anchor point, default scale
+const ship1 = scene.add(new Sprite(textures.spaceship));
+ship1.pos = { x: 200, y: 150 };
+ship1.anchor = { x: 0, y: 0 };
+makeCrosshair(ship1.pos);
+
+// Anchor to center, default scale
+const ship2 = scene.add(new Sprite(textures.spaceship));
+ship2.pos = { x: 300, y: 150 };
+ship2.anchor = { x: -16, y: -16 };
+makeCrosshair(ship2.pos);
+
+// Anchor to middle on y, "width for x, invert horizontal scale
+// This is how you "flip in place".
+const ship3 = scene.add(new Sprite(textures.spaceship));
+ship3.pos = { x: 400, y: 150 };
+ship3.anchor = { x: 32, y: -16 };
+ship3.scale.x = -1;
+makeCrosshair(ship3.pos);
 
 game.run((dt, t) => {
   buildings.map(b => {
