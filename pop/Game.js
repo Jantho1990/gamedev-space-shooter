@@ -14,6 +14,7 @@ class Game {
   }
 
   run(gameUpdate = () => {}) {
+    console.log(this.scene)
     let dt = 0
     let last = 0
     const loop = ms => {
