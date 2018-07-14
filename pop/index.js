@@ -5,10 +5,12 @@ import MouseControls from "./controls/MouseControls"
 import Sprite from "./Sprite"
 import Text from "./Text"
 import Texture from "./Texture"
+import Game from './Game'
 
 export default {
     CanvasRenderer,
     Container,
+    Game,
     KeyControls,
     MouseControls,
     Sprite,
