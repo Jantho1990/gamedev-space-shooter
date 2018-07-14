@@ -6,6 +6,7 @@ import Sprite from "./Sprite"
 import Text from "./Text"
 import Texture from "./Texture"
 import Game from './Game'
+import math from './utils/math'
 
 export default {
     CanvasRenderer,
@@ -13,6 +14,7 @@ export default {
     Game,
     KeyControls,
     MouseControls,
+    math,
     Sprite,
     Text,
     Texture
