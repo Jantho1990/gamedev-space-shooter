@@ -27,6 +27,13 @@ class CanvasRenderer {
           ctx.translate(child.anchor.x, child.anchor.y)
         }
 
+        if (child.rotation) {
+          const { x, y } = child.pivot ? child.pivot : { x: 0, y: 0 }
+          ctx.translate(x, y)
+          ctx.rotate(child.rotation)
+          ctx.translate(-x, -y)
+        }
+
         if (child.scale) {
           ctx.scale(child.scale.x, child.scale.y)
         }
